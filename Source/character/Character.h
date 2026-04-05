@@ -366,6 +366,7 @@ class Character : public DynamicActor, public Importable {
   void clampLinearVelocity();
   void avoidSlidingDownSlope();
   bool isTryingToMoveRecently(const float gracePeriod) const;
+  void setTryingToMoveRecently();
 
   void dodgeImpl(const Character::State dodgeState, const float rushPowerX, bool& isDodgingFlag);
 
@@ -443,7 +444,7 @@ class Character : public DynamicActor, public Importable {
   bool _shouldRetainBodyIfKilled{};
 
   // Physics hacks against the "sliding down the slope" problem.
-  bool _isTryingToMove{};
+  bool _isTryingToMoveRecently{};
   uint64_t _lastMoveTimeMs{};
 
   float _groundAngle{};

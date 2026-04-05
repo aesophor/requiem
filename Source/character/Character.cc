@@ -631,8 +631,7 @@ void Character::moveImpl(const bool moveTowardsRight) {
   }
 
   _isFacingRight = moveTowardsRight;
-  _isTryingToMove = true;
-  _lastMoveTimeMs = time_util::getCurrentTimeMs();
+  setTryingToMoveRecently();
 
   const b2Vec2& velocity = _body->GetLinearVelocity();
   if (velocity.x == 0 && _previousBodyVelocity.x == 0) {
@@ -685,11 +684,16 @@ void Character::avoidSlidingDownSlope() {
     _body->SetLinearDamping(isReallyOnGround ? numeric_limits<float>::infinity() : 0);
   }
 
-  _isTryingToMove = false;
+  _isTryingToMoveRecently = false;
 }
 
 bool Character::isTryingToMoveRecently(const float gracePeriod) const {
-  return _isTryingToMove || (time_util::getCurrentTimeMs() - _lastMoveTimeMs) < gracePeriod;
+  return _isTryingToMoveRecently || (time_util::getCurrentTimeMs() - _lastMoveTimeMs) < gracePeriod;
+}
+
+void Character::setTryingToMoveRecently() {
+  _isTryingToMoveRecently = true;
+  _lastMoveTimeMs = time_util::getCurrentTimeMs();
 }
 
 void Character::jump() {
@@ -718,8 +722,7 @@ void Character::jump() {
   }, .2f);
 
   _isJumping = true;
-  _isTryingToMove = true;
-  _lastMoveTimeMs = time_util::getCurrentTimeMs();
+  setTryingToMoveRecently();
 
   // Respect the temporary linear damping set by dodging.
   if (!isDodging()) {
