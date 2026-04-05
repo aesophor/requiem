@@ -224,10 +224,12 @@ void WorldContactListener::BeginContact(b2Contact* contact) {
         Character* c = reinterpret_cast<Character*>(playerFixture->GetUserData().pointer);
 
         Projectile* missile = dynamic_cast<Projectile*>(p);
-        if (missile->getUser() == c) {
+        if (missile->getUser() == c ||
+            c->getParty()->hasMember(missile->getUser()->getCharacterProfile().jsonFilePath)) {
           contact->SetEnabled(false);
           return;
         }
+
         missile->onHit(c);
       }
       break;
