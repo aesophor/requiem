@@ -152,6 +152,7 @@ class GameMap final {
   void createObjects();
   std::unique_ptr<Player> createPlayer() const;
   Item* createItem(const std::string& itemJson, float x, float y, int amount=1);
+  std::vector<Item*> createItems(const std::vector<std::pair<std::string, int>>& itemJsons, float x, float y);
 
   template <typename ReturnType = StaticActor>
   ReturnType* showStaticActor(std::shared_ptr<StaticActor> actor, float x, float y);

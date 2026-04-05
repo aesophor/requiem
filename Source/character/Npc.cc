@@ -250,7 +250,7 @@ void Npc::interact(Interactable* target) {
   if (dynamic_cast<GameMap::Portal*>(target)) {
     return;
   }
-  
+
   Character::interact(target);
 }
 
@@ -341,21 +341,24 @@ void Npc::disable() {
 }
 
 void Npc::dropItems() {
+  // Decide which items to drop from this NPC.
+  vector<pair<string, int>> itemsToDrop;
+  for (const auto& i : _npcProfile.droppedItems) {
+    const fs::path& itemJsonFilePath = i.first;
+    const float dropChance = i.second.chance;
+    const float randChance = rand_util::randInt(0, 100);
+
+    if (randChance <= dropChance) {
+      const int amount = rand_util::randInt(i.second.minAmount, i.second.maxAmount);
+      itemsToDrop.emplace_back(itemJsonFilePath, amount);
+    }
+  }
+
   // We'll use a callback to drop items since creating fixtures during collision callback
   // will cause the game to crash. Ref: https://github.com/libgdx/libgdx/issues/2730
-  CallbackManager::the().runAfter([this](const CallbackManager::CallbackId) {
+  CallbackManager::the().runAfter([this, items = std::move(itemsToDrop)](const CallbackManager::CallbackId) {
     auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
-
-    for (const auto& i : _npcProfile.droppedItems) {
-      const fs::path& itemJsonFilePath = i.first;
-      const float dropChance = i.second.chance;
-
-      const float randChance = rand_util::randInt(0, 100);
-      if (randChance <= dropChance) {
-        int amount = rand_util::randInt(i.second.minAmount, i.second.maxAmount);
-        gmMgr->getGameMap()->createItem(itemJsonFilePath, _killedPos.x * kPpm, _killedPos.y * kPpm, amount);
-      }
-    }
+    gmMgr->getGameMap()->createItems(items, _killedPos.x * kPpm, _killedPos.y * kPpm);
   }, 0.1f);
 }
 

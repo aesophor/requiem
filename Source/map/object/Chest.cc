@@ -102,11 +102,9 @@ void Chest::onInteract(Character*) {
   _bodySprite->getTexture()->setAliasTexParameters();
 
   auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
-  for (const auto& [itemJson, amount]: _content) {
-    float x = _body->GetPosition().x;
-    float y = _body->GetPosition().y;
-    gmMgr->getGameMap()->createItem(itemJson, x * kPpm, y * kPpm, amount);
-  }
+  float x = _body->GetPosition().x;
+  float y = _body->GetPosition().y;
+  gmMgr->getGameMap()->createItems(_content, x * kPpm, y * kPpm);
 
   constexpr auto kType = GameMap::OpenableObjectType::CHEST;
   gmMgr->setOpened(_tmxMapFilePath, kType, _chestId, true);

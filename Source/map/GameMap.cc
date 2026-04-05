@@ -121,15 +121,35 @@ unique_ptr<Player> GameMap::createPlayer() const {
 }
 
 Item* GameMap::createItem(const string& itemJson, float x, float y, int amount) {
-  Item* item = showDynamicActor<Item>(Item::create(itemJson), x, y);
-  item->setAmount(amount);
+  return createItems({{itemJson, amount}}, x, y).front();
+}
 
-  float offsetX = rand_util::randFloat(-.3f, .3f);
-  float offsetY = 3.0f;
-  item->getBody()->ApplyLinearImpulse({offsetX, offsetY},
-                                      item->getBody()->GetWorldCenter(),
-                                      true);
-  return item;
+vector<Item*> GameMap::createItems(const vector<pair<string, int>>& itemJsons, float x, float y) {
+  vector<Item*> items;
+
+  const int n = itemJsons.size();
+  const float spread = 0.4f;
+
+  for (int i = 0; i < n; i++) {
+    const auto& [itemJson, amount] = itemJsons[i];
+
+    Item* item = showDynamicActor<Item>(Item::create(itemJson), x, y);
+    item->setAmount(amount);
+
+    float offsetX = 0.0f;
+    float offsetY = 3.0f;
+
+    // Spread the items evenly around the center.
+    if (n > 1) {
+      offsetX = std::lerp(-spread, spread, static_cast<float>(i) / (n - 1));
+    }
+
+    item->getBody()->ApplyLinearImpulse({offsetX, offsetY}, item->getBody()->GetWorldCenter(), true);
+
+    items.push_back(item);
+  }
+
+  return items;
 }
 
 bool GameMap::beginBossFight(const string& targetNpcJsonFilePath,
