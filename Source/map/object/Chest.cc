@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2024 Marco Wang <m.aesophor@gmail.com>. All rights reserved.
+// Copyright (c) 2018-2026 Marco Wang <m.aesophor@gmail.com>. All rights reserved.
 
 #include "Chest.h"
 
@@ -31,11 +31,11 @@ constexpr auto kItemMaskBits = kGround | kPlatform | kWall;
 
 Chest::Chest(const string& tmxMapFilePath,
              const int chestId,
-             const string& itemJsons)
+             const string& content)
     : DynamicActor{kChestNumAnimations, kChestNumFixtures},
       _tmxMapFilePath{tmxMapFilePath},
       _chestId{chestId},
-      _itemJsons{string_util::split(itemJsons)} {
+      _content{parseContent(content)} {
   constexpr auto kType = GameMap::OpenableObjectType::CHEST;
   auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
   _isOpened = gmMgr->isOpened(tmxMapFilePath, kType, chestId);
@@ -102,10 +102,10 @@ void Chest::onInteract(Character*) {
   _bodySprite->getTexture()->setAliasTexParameters();
 
   auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
-  for (const auto& item : _itemJsons) {
+  for (const auto& [itemJson, amount]: _content) {
     float x = _body->GetPosition().x;
     float y = _body->GetPosition().y;
-    gmMgr->getGameMap()->createItem(item, x * kPpm, y * kPpm);
+    gmMgr->getGameMap()->createItem(itemJson, x * kPpm, y * kPpm, amount);
   }
 
   constexpr auto kType = GameMap::OpenableObjectType::CHEST;
@@ -153,6 +153,32 @@ void Chest::removeHintBubbleFx() {
   auto fxMgr = SceneManager::the().getCurrentScene<GameScene>()->getFxManager();
   fxMgr->removeFx(_hintBubbleFxSprite);
   _hintBubbleFxSprite = nullptr;
+}
+
+vector<pair<string, int>> Chest::parseContent(const string& contentStr) {
+  vector<pair<string, int>> content;
+
+  for (const auto& s : string_util::split(contentStr, '\n')) {
+    const vector<string> tokens = string_util::split(s);
+    if (tokens.size() < 2) {
+      VGLOG(LOG_ERR, "Failed to parse line [%s]", s.c_str());
+      continue;
+    }
+
+    const string& itemJson = tokens[0];
+    int amount = 1;
+    try {
+      amount = std::stoi(tokens[1]);
+    } catch (const exception& ex) {
+      VGLOG(LOG_ERR, "Failed to parse out of range amount: [%s], err [%s]", tokens[1].c_str(), ex.what());
+    } catch (...) {
+      VGLOG(LOG_ERR, "Failed to parse [%s], uncaught exception.", tokens[1].c_str());
+    }
+
+    content.emplace_back(itemJson, amount);
+  }
+
+  return content;
 }
 
 }  // namespace requiem

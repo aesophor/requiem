@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2024 Marco Wang <m.aesophor@gmail.com>. All rights reserved.
+// Copyright (c) 2018-2026 Marco Wang <m.aesophor@gmail.com>. All rights reserved.
 
 #ifndef REQUIEM_MAP_OBJECT_CHEST_H_
 #define REQUIEM_MAP_OBJECT_CHEST_H_
@@ -36,10 +36,11 @@ class Chest : public DynamicActor, public Interactable {
                   float y,
                   short categoryBits,
                   short maskBits);
+  std::vector<std::pair<std::string, int>> parseContent(const std::string& contentStr);
 
   const std::string _tmxMapFilePath;
   const int _chestId{};
-  const std::vector<std::string> _itemJsons;
+  const std::vector<std::pair<std::string, int>> _content;
   bool _isOpened{};
   ax::Sprite* _hintBubbleFxSprite{};
 };
