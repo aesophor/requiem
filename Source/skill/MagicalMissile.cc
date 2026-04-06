@@ -102,7 +102,7 @@ void MagicalMissile::onHit(Character* target) {
 
   if (target) {
     const bool isFacingRight = _body->GetLinearVelocity().x > 0;
-    const float knockBackForceX = isFacingRight ? 3.5f : -3.5f;
+    const float knockBackForceX = isFacingRight ? 2.5f : -2.5f;
     const float knockBackForceY = 1.0f;
     _user->knockBack(target, knockBackForceX, knockBackForceY);
     _user->inflictDamage(target, getDamage());
