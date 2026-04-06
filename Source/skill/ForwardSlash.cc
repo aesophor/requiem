@@ -40,11 +40,9 @@ void ForwardSlash::activate() {
   // Modify character's stats.
   _user->getCharacterProfile().stamina += _skillProfile.deltaStamina;
 
-  const float kRushPowerX = 5.0f;
-  _user->getBody()->ApplyLinearImpulseToCenter({_user->isFacingRight() ? kRushPowerX : -kRushPowerX, 1.0f}, true);
-
   const float oldBodyDamping = _user->getBody()->GetLinearDamping();
-  _user->getBody()->SetLinearDamping(4.f);
+  _user->getBody()->SetLinearDamping(kLinearDamping);
+  _user->getBody()->ApplyLinearImpulseToCenter({_user->isFacingRight() ? kRushPowerX : -kRushPowerX, 1.0f}, true);
 
   _user->setInvincible(true);
 

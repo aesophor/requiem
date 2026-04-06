@@ -790,12 +790,12 @@ void Character::getUpFromFalling() {
 }
 
 void Character::dodgeBackward() {
-  constexpr float rushPowerX = -5.0f;
+  constexpr float rushPowerX = -kDodgeRushPowerX;
   dodgeImpl(State::DODGING_BACKWARD, rushPowerX, _isDodgingBackward);
 }
 
 void Character::dodgeForward() {
-  constexpr float rushPowerX = 5.0f;
+  constexpr float rushPowerX = kDodgeRushPowerX;
   dodgeImpl(State::DODGING_FORWARD, rushPowerX, _isDodgingForward);
 }
 
@@ -806,7 +806,7 @@ void Character::dodgeImpl(const Character::State dodgeState, const float rushPow
 
   _comboSystem->reset();
 
-  _body->SetLinearDamping(4.0f);
+  _body->SetLinearDamping(kDodgeLinearDamping);
   _body->ApplyLinearImpulseToCenter({_isFacingRight ? rushPowerX : -rushPowerX, 1.0f}, true);
 
   enableAfterImageFx(AfterImageFxManager::kPlayerAfterImageColor);

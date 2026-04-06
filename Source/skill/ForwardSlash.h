@@ -29,6 +29,9 @@ class ForwardSlash final : public Skill {
   virtual std::filesystem::path getIconPath() const override; // Skill
 
  private:
+  static constexpr float kLinearDamping{4.0f};
+  static constexpr float kRushPowerX{5.0f};
+
   Skill::Profile _skillProfile;
   Character* _user{};
   bool _hasActivated{};

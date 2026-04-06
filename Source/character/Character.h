@@ -505,6 +505,10 @@ class Character : public DynamicActor, public Importable {
   // (1) be a leader who has a set of allies/followers, or
   // (2) be a follower of other character
   std::shared_ptr<Party> _party;
+
+ private:
+  static constexpr float kDodgeLinearDamping{4.0f};
+  static constexpr float kDodgeRushPowerX{5.0f};
 };
 
 }  // namespace requiem
