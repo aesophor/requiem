@@ -253,6 +253,32 @@ void WorldContactListener::BeginContact(b2Contact* contact) {
       }
       break;
     }
+    case category_bits::kProjectile | category_bits::kGround: {
+      b2Fixture* projectileFixture = GetTargetFixture(category_bits::kProjectile, fixtureA, fixtureB);
+      b2Fixture* groundFixture = GetTargetFixture(category_bits::kGround, fixtureA, fixtureB);
+
+      if (projectileFixture && groundFixture) {
+        DynamicActor* p = reinterpret_cast<DynamicActor*>(projectileFixture->GetUserData().pointer);
+        Projectile* missile = dynamic_cast<Projectile*>(p);
+        if (missile) {
+          missile->onHit(nullptr);
+        }
+      }
+      break;
+    }
+    case category_bits::kProjectile | category_bits::kWall: {
+      b2Fixture* projectileFixture = GetTargetFixture(category_bits::kProjectile, fixtureA, fixtureB);
+      b2Fixture* wallFixture = GetTargetFixture(category_bits::kWall, fixtureA, fixtureB);
+
+      if (projectileFixture && wallFixture) {
+        DynamicActor* p = reinterpret_cast<DynamicActor*>(projectileFixture->GetUserData().pointer);
+        Projectile* missile = dynamic_cast<Projectile*>(p);
+        if (missile) {
+          missile->onHit(nullptr);
+        }
+      }
+      break;
+    }
     default:
       break;
   }

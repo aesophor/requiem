@@ -29,7 +29,7 @@ constexpr int kMagicalMissleNumAnimations = MagicalMissile::AnimationType::SIZE;
 constexpr int kMagicalMissleNumFixtures = 1;
 
 constexpr auto kMagicalMissleCategoryBits = kProjectile;
-constexpr auto kMagicalMissleMaskBits = kPlayer | kEnemy | kWall;
+constexpr auto kMagicalMissleMaskBits = kPlayer | kEnemy | kGround | kWall;
 
 }  // namespace
 
@@ -46,9 +46,10 @@ bool MagicalMissile::showOnMap(float x, float y) {
 
   _isShownOnMap = true;
 
-  defineBody(b2BodyType::b2_kinematicBody, x, y,
+  defineBody(b2BodyType::b2_dynamicBody, x, y,
              kMagicalMissleCategoryBits,
              kMagicalMissleMaskBits);
+  _body->SetGravityScale(0.0f);
 
   defineTexture(_skillProfile.textureResDirPath, x, y);
 
