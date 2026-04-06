@@ -25,16 +25,16 @@ namespace requiem {
 
 namespace {
 
-constexpr int kMagicalMissleNumAnimations = MagicalMissile::AnimationType::SIZE;
-constexpr int kMagicalMissleNumFixtures = 1;
+constexpr int kMagicalMissileNumAnimations = MagicalMissile::AnimationType::SIZE;
+constexpr int kMagicalMissileNumFixtures = 1;
 
-constexpr auto kMagicalMissleCategoryBits = kProjectile;
-constexpr auto kMagicalMissleMaskBits = kPlayer | kEnemy | kGround | kWall;
+constexpr auto kMagicalMissileCategoryBits = kProjectile;
+constexpr auto kMagicalMissileMaskBits = kPlayer | kEnemy | kGround | kWall;
 
 }  // namespace
 
 MagicalMissile::MagicalMissile(const fs::path& jsonFilePath, Character* user, const bool onGround)
-    : DynamicActor{kMagicalMissleNumAnimations, kMagicalMissleNumFixtures},
+    : DynamicActor{kMagicalMissileNumAnimations, kMagicalMissileNumFixtures},
       _skillProfile{jsonFilePath},
       _user{user},
       _isOnGround{onGround} {}
@@ -47,8 +47,8 @@ bool MagicalMissile::showOnMap(float x, float y) {
   _isShownOnMap = true;
 
   defineBody(b2BodyType::b2_dynamicBody, x, y,
-             kMagicalMissleCategoryBits,
-             kMagicalMissleMaskBits);
+             kMagicalMissileCategoryBits,
+             kMagicalMissileMaskBits);
   _body->SetGravityScale(0.0f);
 
   defineTexture(_skillProfile.textureResDirPath, x, y);
