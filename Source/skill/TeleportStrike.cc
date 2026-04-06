@@ -42,7 +42,7 @@ bool isTargetFarEnoughFromWall(Character* target, const float minDistRequired, c
   }
 
   auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
-  return !gmMgr->rayCast(src, dst, category_bits::kWall | category_bits::kGround);
+  return !gmMgr->raycast(src, dst, category_bits::kWall | category_bits::kGround);
 }
 
 bool isTargetFacingAwayFarEnoughFromWall(Character* target, const float minDistRequired) {

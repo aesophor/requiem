@@ -1406,7 +1406,7 @@ bool Character::isOnGround(const bool raycast) const {
   const b2Vec2 dst{src.x, src.y - _characterProfile.bodyWidth * kGroundCheckDistRatio};
 
   auto gmMgr = SceneManager::the().getCurrentScene<GameScene>()->getGameMapManager();
-  return gmMgr->rayCast(src, dst, category_bits::kGround);
+  return gmMgr->raycast(src, dst, category_bits::kGround);
 }
 
 int Character::getItemAmount(const string& itemJsonFilePath) const {

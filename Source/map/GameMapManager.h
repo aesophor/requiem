@@ -40,7 +40,7 @@ class GameMapManager final {
                    const float fadeInSec = Shade::kFadeInSec,
                    const float fadeOutSec = Shade::kFadeOutSec);
   void destroyGameMap();
-  bool rayCast(const b2Vec2& src, const b2Vec2& dst, const short categoryBitsToStop,
+  bool raycast(const b2Vec2& src, const b2Vec2& dst, const short categoryBitsToStop,
                const bool shouldDrawLine = false) const;
 
   std::optional<std::string> getTmxMapFilePathByMapAlias(const std::string& mapAlias) const;
