@@ -46,9 +46,14 @@ bool MagicalMissile::showOnMap(float x, float y) {
 
   _isShownOnMap = true;
 
+  short maskBits = kMagicalMissileMaskBits;
+  if (_isOnGround) {
+    maskBits &= ~kGround;
+  }
+
   defineBody(b2BodyType::b2_dynamicBody, x, y,
              kMagicalMissileCategoryBits,
-             kMagicalMissileMaskBits);
+             maskBits);
   _body->SetGravityScale(0.0f);
 
   defineTexture(_skillProfile.textureResDirPath, x, y);
