@@ -728,7 +728,7 @@ void Character::jump() {
   if (!isDodging()) {
     _body->SetLinearDamping(0);
   }
-  _body->ApplyLinearImpulse({0, _characterProfile.jumpHeight}, _body->GetWorldCenter(), true);
+  _body->ApplyLinearImpulseToCenter({0, _characterProfile.jumpHeight}, true);
 }
 
 void Character::doubleJump() {
@@ -1007,7 +1007,7 @@ void Character::knockBack(Character* target, float forceX, float forceY) const {
 
   b2Body* b2body = target->getBody();
   b2body->SetLinearDamping(4.0f);
-  b2body->ApplyLinearImpulse({forceX, forceY}, b2body->GetWorldCenter(), true);
+  b2body->ApplyLinearImpulseToCenter({forceX, forceY}, true);
 }
 
 bool Character::inflictDamage(Character* target, int damage) {

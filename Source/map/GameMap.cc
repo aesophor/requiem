@@ -144,7 +144,7 @@ vector<Item*> GameMap::createItems(const vector<pair<string, int>>& itemJsons, f
       offsetX = std::lerp(-spread, spread, static_cast<float>(i) / (n - 1));
     }
 
-    item->getBody()->ApplyLinearImpulse({offsetX, offsetY}, item->getBody()->GetWorldCenter(), true);
+    item->getBody()->ApplyLinearImpulseToCenter({offsetX, offsetY}, true);
 
     items.push_back(item);
   }

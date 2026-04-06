@@ -18,12 +18,12 @@ bool handleAttackingUpward(Character& c) {
   const float forceX = c.isFacingRight() ? .3f : -.3f;
   const float forceY = 3.0f;
   c.getBody()->SetLinearDamping(0);
-  c.getBody()->ApplyLinearImpulse({forceX, forceY}, c.getBody()->GetWorldCenter(), true);
+  c.getBody()->ApplyLinearImpulseToCenter({forceX, forceY}, true);
 
   if (c.getInRangeTargets().size()) {
     Character* target = *(c.getInRangeTargets().begin());
     target->getBody()->SetLinearDamping(0);
-    target->getBody()->ApplyLinearImpulse({forceX, forceY}, target->getBody()->GetWorldCenter(), true);
+    target->getBody()->ApplyLinearImpulseToCenter({forceX, forceY}, true);
   }
 
   return true;
