@@ -583,7 +583,7 @@ void Character::onMeleeWeaponContactWithEnemyBody(Character* enemy) {
 }
 
 bool Character::isMovementDisallowed() const {
-  return _isCrouching || isJumpingDownDisallowed();
+  return _isCrouching || _isUsingSkill || isJumpingDownDisallowed();
 }
 
 bool Character::isJumpingDownDisallowed() const {
