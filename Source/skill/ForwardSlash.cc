@@ -40,24 +40,16 @@ void ForwardSlash::activate() {
   // Modify character's stats.
   _user->getCharacterProfile().stamina += _skillProfile.deltaStamina;
 
-  const float rushPower = (_user->isFacingRight()) ? 5.f : -5.f;
-  _user->getBody()->SetLinearVelocity({rushPower, 0});
+  const float kRushPowerX = 5.0f;
+  _user->getBody()->ApplyLinearImpulseToCenter({_user->isFacingRight() ? kRushPowerX : -kRushPowerX, 1.0f}, true);
 
   const float oldBodyDamping = _user->getBody()->GetLinearDamping();
-  _user->getBody()->SetLinearDamping(2.f);
-
-  const float oldGravityScale = _user->getBody()->GetGravityScale();
-  _user->getBody()->SetGravityScale(0.f);
+  _user->getBody()->SetLinearDamping(4.f);
 
   _user->setInvincible(true);
-  _user->getFixtures()[Character::FixtureType::BODY]->SetSensor(true);
 
   auto afterImageFxMgr = SceneManager::the().getCurrentScene<GameScene>()->getAfterImageFxManager();
   afterImageFxMgr->registerNode(_user->getNode(), AfterImageFxManager::kPlayerAfterImageColor, 0.15f, 0.05f);
-
-  CallbackManager::the().runAfter([this, oldGravityScale](const CallbackManager::CallbackId) {
-    _user->getBody()->SetGravityScale(oldGravityScale);
-  }, _skillProfile.framesDuration / 4);
 
   CallbackManager::the().runAfter([this, oldBodyDamping](const CallbackManager::CallbackId) {
     auto afterImageFxMgr = SceneManager::the().getCurrentScene<GameScene>()->getAfterImageFxManager();
@@ -65,7 +57,6 @@ void ForwardSlash::activate() {
 
     _user->getBody()->SetLinearDamping(oldBodyDamping);
     _user->setInvincible(false);
-    _user->getFixtures()[Character::FixtureType::BODY]->SetSensor(false);
     _user->removeActiveSkillInstance(this);
   }, _skillProfile.framesDuration);
 

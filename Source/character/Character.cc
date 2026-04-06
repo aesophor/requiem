@@ -672,7 +672,7 @@ void Character::clampLinearVelocity() {
 }
 
 void Character::avoidSlidingDownSlope() {
-  if (isDodging() || _isTakingDamage || _isTakingDamageFromTraps) {
+  if (isDodging() || isUsingSkill() || _isTakingDamage || _isTakingDamageFromTraps) {
     return;
   }
 
