@@ -1001,8 +1001,12 @@ void Character::knockBack(Character* target, float forceX, float forceY) const {
     return;
   }
 
+  if (_isTakingDamage) {
+    return;
+  }
+
   b2Body* b2body = target->getBody();
-  b2body->SetLinearDamping(0);
+  b2body->SetLinearDamping(4.0f);
   b2body->ApplyLinearImpulse({forceX, forceY}, b2body->GetWorldCenter(), true);
 }
 
@@ -1043,12 +1047,11 @@ bool Character::inflictDamage(Character* target, int damage,
         return;
       }
 
-      inflictDamage(target, damage);
-
       const float attackForce = _characterProfile.attackForce;
       const float knockBackForceX = _isFacingRight ? attackForce : -attackForce;
       const float knockBackForceY = attackForce;
       knockBack(target, knockBackForceX, knockBackForceY);
+      inflictDamage(target, damage);
 
       if (const auto weapon = _equipmentSlots[Equipment::Type::WEAPON]) {
         Audio::the().playSfx(weapon->getSfxFilePath(Equipment::Sfx::SFX_HIT));
