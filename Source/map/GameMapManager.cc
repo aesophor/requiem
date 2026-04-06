@@ -160,7 +160,11 @@ bool GameMapManager::raycast(const b2Vec2& src, const b2Vec2& dst, const short c
   if (shouldDrawLine) {
     auto draw = ax::DrawNode::create();
     draw->drawLine(Point{src.x * kPpm, src.y * kPpm}, Point{dst.x * kPpm, dst.y * kPpm}, ax::Color4F::WHITE);
-    _layer->addChild(draw, z_order::kHud);
+    ax_util::addChildWithParentCameraMask(_layer, draw, z_order::kTmxTiledMap);
+
+    CallbackManager::the().runAfter([this, draw](const CallbackManager::CallbackId) {
+      _layer->removeChild(draw);
+    }, 2.0f);
   }
 
   B2RayCastCallback cb{[categoryBitsToStop](b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) -> float {
