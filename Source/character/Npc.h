@@ -81,7 +81,7 @@ class Npc final : public Character, public Interactable {
   void disable();
 
   void act(const float delta) { _npcController.update(delta); }
-  void reverseDirection() { _npcController.reverseDirection(); }
+  void onTouchingPivotMarker();
   void dropItems();
 
   void updateDialogueTreeIfNeeded();

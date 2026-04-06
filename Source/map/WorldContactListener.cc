@@ -97,7 +97,8 @@ void WorldContactListener::BeginContact(b2Contact* contact) {
     case category_bits::kEnemy | category_bits::kPivotMarker: {
       b2Fixture* enemyFixture = GetTargetFixture(category_bits::kEnemy, fixtureA, fixtureB);
       if (enemyFixture) {
-        reinterpret_cast<Npc*>(enemyFixture->GetUserData().pointer)->reverseDirection();
+        Npc* npc = reinterpret_cast<Npc*>(enemyFixture->GetUserData().pointer);
+        npc->onTouchingPivotMarker();
       }
       break;
     }

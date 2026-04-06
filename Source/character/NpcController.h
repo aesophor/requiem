@@ -20,6 +20,7 @@ class NpcController final {
   void setMoveDest(const b2Vec2& targetPos, std::function<void()> onArrivalAtTarget);
 
   inline void reverseDirection() { _isMovingRight = !_isMovingRight; }
+  inline void ensureMinMoveDuration(const float minDuration) { _moveDuration = std::max(_moveDuration, minDuration); }
   inline bool isSandboxing() const { return _isSandboxing; }
   inline void setSandboxing(const bool sandboxing) { _isSandboxing = sandboxing; }
   inline void clearMoveDest() { _moveDest.SetZero(); }

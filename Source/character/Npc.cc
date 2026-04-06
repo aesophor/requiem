@@ -340,6 +340,11 @@ void Npc::disable() {
   _isEnabled = false;
 }
 
+void Npc::onTouchingPivotMarker() {
+  _npcController.reverseDirection();
+  _npcController.ensureMinMoveDuration(1.5f);
+}
+
 void Npc::dropItems() {
   // Decide which items to drop from this NPC.
   vector<pair<string, int>> itemsToDrop;
